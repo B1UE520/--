@@ -4,321 +4,273 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>🦊 奋斗小小鱼｜公考训练营打卡日历</title>
-<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: "ZCOOL KuaiLe", "Ma Shan Zheng", "Microsoft YaHei", sans-serif;
-    color: #5b4b64;
-    background: linear-gradient(135deg, #ffeef6 0%, #eaf6ff 45%, #f3e8ff 100%);
-    overflow-x: hidden;
-  }
+@font-face {
+  font-family: "ZCOOL KuaiLe";
+  src: url("./fonts/zcool-kuaile.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-  /* 漂浮文字动画层 */
-  .float-text-layer {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .float-word {
-    position: absolute;
-    font-size: 22px;
-    color: #ff7aa8;
-    opacity: 0;
-    animation: floatUp linear infinite;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(255, 182, 193, 0.6);
-    letter-spacing: 2px;
-  }
-  @keyframes floatUp {
-    0% { transform: translateY(110vh) translateX(0) rotate(-6deg); opacity: 0; }
-    10% { opacity: 0.85; }
-    50% { transform: translateY(50vh) translateX(40px) rotate(4deg); opacity: 0.7; }
-    100% { transform: translateY(-20vh) translateX(-30px) rotate(-4deg); opacity: 0; }
-  }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "ZCOOL KuaiLe", "Microsoft YaHei", sans-serif;
+  color: #5b4b64;
+  background: linear-gradient(135deg, #ffeef6 0%, #eaf6ff 45%, #f3e8ff 100%);
+  overflow-x: hidden;
+}
 
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 24px 18px 40px;
-  }
+/* 漂浮文字 */
+.float-text-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.float-word {
+  position: absolute;
+  font-size: 22px;
+  color: #ff7aa8;
+  opacity: 0;
+  animation: floatUp linear infinite;
+  text-shadow: 0 0 8px rgba(255,255,255,.9), 0 0 16px rgba(255,182,193,.6);
+  letter-spacing: 2px;
+}
+@keyframes floatUp {
+  0% { transform: translateY(110vh) translateX(0) rotate(-6deg); opacity: 0; }
+  10% { opacity: .85; }
+  50% { transform: translateY(50vh) translateX(40px) rotate(4deg); opacity: .7; }
+  100% { transform: translateY(-20vh) translateX(-30px) rotate(-4deg); opacity: 0; }
+}
 
-  /* 顶部导航 */
-  .top-nav {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-  }
-  .soft-btn {
-    border: none;
-    border-radius: 999px;
-    padding: 10px 18px;
-    background: #fff;
-    color: #7a5fa2;
-    font-family: inherit;
-    font-size: 15px;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(180, 140, 210, 0.25);
-    transition: 0.25s;
-  }
-  .soft-btn:hover {
-    background: #ffd6ec;
-    transform: translateY(-2px);
-  }
-  .soft-btn.pink { background: #ff9ec7; color: #fff; }
-  .soft-btn.pink:hover { background: #ff7ab0; }
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 24px 18px 40px;
+}
 
-  /* 页面通用卡片 */
-  .card {
-    background: rgba(255, 255, 255, 0.78);
-    border: 2px solid #fff;
-    border-radius: 28px;
-    padding: 24px;
-    box-shadow: 0 10px 30px rgba(181, 145, 214, 0.22);
-    backdrop-filter: blur(6px);
-  }
+/* 顶部导航 */
+.top-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.soft-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: #fff;
+  color: #7a5fa2;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(180,140,210,.25);
+  transition: .25s;
+}
+.soft-btn:hover { background: #ffd6ec; transform: translateY(-2px); }
+.soft-btn.pink { background: #ff9ec7; color: #fff; }
+.soft-btn.pink:hover { background: #ff7ab0; }
 
-  /* 序言页 */
-  .intro-page { text-align: center; padding: 30px 10px; }
-  .fox-icon { font-size: 72px; margin-bottom: 10px; animation: foxBounce 2s ease-in-out infinite; }
-  @keyframes foxBounce {
-    0%, 100% { transform: translateY(0) rotate(-4deg); }
-    50% { transform: translateY(-10px) rotate(4deg); }
-  }
-  .intro-page h1 {
-    font-size: 34px;
-    color: #ff6fa0;
-    margin: 8px 0 14px;
-    text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(255, 182, 193, 0.5);
-  }
-  .intro-page p { font-size: 17px; line-height: 1.9; color: #6e5a7d; }
-  .big-btn {
-    margin-top: 22px;
-    padding: 14px 34px;
-    border: none;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #ff9ec7, #b9a7ff);
-    color: #fff;
-    font-family: inherit;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 0 10px 24px rgba(255, 120, 170, 0.4);
-    transition: 0.25s;
-  }
-  .big-btn:hover { transform: translateY(-3px) scale(1.03); }
+.card {
+  background: rgba(255,255,255,.78);
+  border: 2px solid #fff;
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(181,145,214,.22);
+  backdrop-filter: blur(6px);
+}
 
-  /* 日历页 */
-  .calendar-page h2 {
-    text-align: center;
-    color: #7a5fa2;
-    font-size: 28px;
-    margin-bottom: 10px;
-  }
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-top: 18px;
-  }
-  .day-cell {
-    background: #fff;
-    border: 2px solid #fff;
-    border-radius: 18px;
-    padding: 12px 6px;
-    text-align: center;
-    min-height: 88px;
-    cursor: pointer;
-    transition: 0.25s;
-    box-shadow: 0 4px 12px rgba(181, 145, 214, 0.18);
-  }
-  .day-cell:hover { transform: translateY(-4px) scale(1.04); background: #fff5fb; }
-  .day-cell.empty { background: #f1e9fa; cursor: default; transform: none; }
-  .day-cell.normal { border-color: #fff; }
-  .day-cell.exam { background: #ffe4ec; border-color: #ff9ec7; }
-  .day-cell.celebration { background: #e4fff1; border-color: #9ee8b8; }
-  .day-cell.mock { background: #fff7d6; border-color: #ffd966; }
-  .day-label { font-size: 15px; color: #5b4b64; }
-  .day-desc { font-size: 11px; margin-top: 4px; color: #7a6a8c; line-height: 1.35; }
-  .legend { text-align: center; margin-top: 14px; font-size: 14px; color: #6e5a7d; }
-  .legend span {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 8px;
-    margin: 0 4px;
-    background: #fff;
-  }
+/* 序言页 */
+.intro-page { text-align: center; padding: 30px 10px; }
+.fox-icon { font-size: 72px; margin-bottom: 10px; animation: foxBounce 2s ease-in-out infinite; }
+@keyframes foxBounce {
+  0%,100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-10px) rotate(4deg); }
+}
+.intro-page h1 {
+  font-size: 34px;
+  color: #ff6fa0;
+  margin: 8px 0 14px;
+  text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(255,182,193,.5);
+}
+.intro-page p { font-size: 17px; line-height: 1.9; color: #6e5a7d; }
+.big-btn {
+  margin-top: 22px;
+  padding: 14px 34px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#ff9ec7,#b9a7ff);
+  color: #fff;
+  font-family: inherit;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(255,120,170,.4);
+  transition: .25s;
+}
+.big-btn:hover { transform: translateY(-3px) scale(1.03); }
 
-  /* 打卡详情页 */
-  .check-page h2 {
-    color: #ff6fa0;
-    font-size: 26px;
-    margin-bottom: 12px;
-  }
-  .tip-box {
-    padding: 12px 14px;
-    border-radius: 16px;
-    margin-bottom: 14px;
-    font-size: 15px;
-    line-height: 1.7;
-  }
-  .tip-red { background: #ffe4ec; border-left: 5px solid #ff7ab0; }
-  .tip-green { background: #e4fff1; border-left: 5px solid #6ddc92; }
-  .tip-yellow { background: #fff7d6; border-left: 5px solid #ffd966; }
-  .tip-gray { background: #f1e9fa; border-left: 5px solid #b9a7ff; }
+/* 日历页 */
+.calendar-page h2 { text-align: center; color: #7a5fa2; font-size: 28px; margin-bottom: 10px; }
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+.day-cell {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 18px;
+  padding: 12px 6px;
+  text-align: center;
+  min-height: 88px;
+  cursor: pointer;
+  transition: .25s;
+  box-shadow: 0 4px 12px rgba(181,145,214,.18);
+}
+.day-cell:hover { transform: translateY(-4px) scale(1.04); background: #fff5fb; }
+.day-cell.empty { background: #f1e9fa; cursor: default; transform: none; }
+.day-cell.normal { border-color: #fff; }
+.day-cell.exam { background: #ffe4ec; border-color: #ff9ec7; }
+.day-cell.celebration { background: #e4fff1; border-color: #9ee8b8; }
+.day-cell.mock { background: #fff7d6; border-color: #ffd966; }
+.day-label { font-size: 15px; color: #5b4b64; }
+.day-desc { font-size: 11px; margin-top: 4px; color: #7a6a8c; line-height: 1.35; }
+.legend { text-align: center; margin-top: 14px; font-size: 14px; color: #6e5a7d; }
+.legend span { display: inline-block; padding: 4px 8px; border-radius: 8px; margin: 0 4px; background: #fff; }
 
-  .section {
-    background: rgba(255, 255, 255, 0.8);
-    border: 2px solid #fff;
-    border-radius: 24px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 8px 22px rgba(181, 145, 214, 0.18);
-  }
-  .section h3 {
-    color: #7a5fa2;
-    margin-top: 0;
-    font-size: 20px;
-  }
-  .check-item {
-    padding: 9px 4px;
-    font-size: 16px;
-    color: #5b4b64;
-  }
-  input[type="checkbox"] {
-    transform: scale(1.3);
-    margin-right: 10px;
-    accent-color: #ff7ab0;
-  }
-  textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 14px;
-    border: 2px solid #f1e9fa;
-    background: #fff;
-    font-family: inherit;
-    font-size: 15px;
-  }
-  ul { line-height: 1.9; color: #5b4b64; }
+/* 打卡详情页 */
+.check-page h2 { color: #ff6fa0; font-size: 26px; margin-bottom: 12px; }
+.tip-box {
+  padding: 12px 14px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.tip-red { background: #ffe4ec; border-left: 5px solid #ff7ab0; }
+.tip-green { background: #e4fff1; border-left: 5px solid #6ddc92; }
+.tip-yellow { background: #fff7d6; border-left: 5px solid #ffd966; }
+.tip-gray { background: #f1e9fa; border-left: 5px solid #b9a7ff; }
 
-  /* 红狐狸角色 */
-  .fox-character {
-    position: fixed;
-    left: 18px;
-    bottom: 18px;
-    width: 78px;
-    height: 78px;
-    z-index: 9999;
-    cursor: pointer;
-    transition: left 0.4s ease-out, bottom 0.4s ease-out;
-    user-select: none;
-    filter: drop-shadow(0 6px 10px rgba(255, 105, 135, 0.35));
-  }
-  .fox-character.jumping { animation: foxJump 0.5s ease; }
-  @keyframes foxJump {
-    0%, 100% { transform: translateY(0) rotate(-3deg); }
-    50% { transform: translateY(-18px) rotate(6deg); }
-  }
-  .fox-character .fox-body {
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 35% 30%, #ff9ec7 0%, #ff5c8a 45%, #e5446b 100%);
-    border-radius: 50% 50% 42% 42%;
-    position: relative;
-    border: 3px solid #fff;
-  }
-  .fox-character .ear {
-    position: absolute;
-    top: -14px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 22px solid #ff5c8a;
-  }
-  .fox-character .ear.left { left: 14px; transform: rotate(-14deg); }
-  .fox-character .ear.right { right: 14px; transform: rotate(14deg); }
-  .fox-character .eye {
-    position: absolute;
-    top: 30px;
-    width: 10px;
-    height: 14px;
-    background: #2b2440;
-    border-radius: 50%;
-  }
-  .fox-character .eye.left { left: 22px; }
-  .fox-character .eye.right { right: 22px; }
-  .fox-character .cheek {
-    position: absolute;
-    top: 44px;
-    width: 10px;
-    height: 6px;
-    background: #ffd1e0;
-    border-radius: 50%;
-  }
-  .fox-character .cheek.left { left: 14px; }
-  .fox-character .cheek.right { right: 14px; }
-  .fox-character .mouth {
-    position: absolute;
-    top: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 4px;
-    border-bottom: 2px solid #2b2440;
-    border-radius: 0 0 8px 8px;
-  }
-  .fox-character .tail {
-    position: absolute;
-    right: -14px;
-    bottom: 14px;
-    width: 24px;
-    height: 18px;
-    background: #ff5c8a;
-    border-radius: 0 18px 18px 0;
-    border: 3px solid #fff;
-    transform-origin: left center;
-    animation: tailWag 1.6s ease-in-out infinite;
-  }
-  @keyframes tailWag {
-    0%, 100% { transform: rotate(-10deg); }
-    50% { transform: rotate(18deg); }
-  }
+.section {
+  background: rgba(255,255,255,.8);
+  border: 2px solid #fff;
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 22px rgba(181,145,214,.18);
+}
+.section h3 { color: #7a5fa2; margin-top: 0; font-size: 20px; }
+.check-item {
+  padding: 9px 4px;
+  font-size: 16px;
+  color: #5b4b64;
+}
+input[type="checkbox"] {
+  transform: scale(1.3);
+  margin-right: 10px;
+  accent-color: #ff7ab0;
+}
+textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid #f1e9fa;
+  background: #fff;
+  font-family: inherit;
+  font-size: 15px;
+}
+ul { line-height: 1.9; color: #5b4b64; }
 
-  .hidden { display: none !important; }
+/* 互动按钮 */
+.interaction-panel {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.feed-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg,#ffb3d1,#c9b6ff);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(255,120,170,.3);
+  transition: .25s;
+}
+.feed-btn:hover { transform: translateY(-2px); }
 
-  @media (max-width: 640px) {
-    .intro-page h1 { font-size: 28px; }
-    .calendar-grid { grid-template-columns: repeat(4, 1fr); }
-    .fox-character { width: 64px; height: 64px; }
-  }
+/* 狐狸娘看板娘 */
+.fox-girl {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  width: 110px;
+  height: 140px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: left .4s ease-out, bottom .4s ease-out;
+  user-select: none;
+  filter: drop-shadow(0 8px 14px rgba(255,105,135,.35));
+}
+.fox-girl img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.fox-girl.walking { animation: foxWalk .35s steps(2) infinite; }
+@keyframes foxWalk {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* 爱心加油动画 */
+.love-popup {
+  position: fixed;
+  font-size: 28px;
+  pointer-events: none;
+  z-index: 10000;
+  animation: loveFloat 1.6s ease-out forwards;
+}
+@keyframes loveFloat {
+  0% { transform: translateY(0) scale(.6); opacity: 0; }
+  20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-140px) scale(1); opacity: 0; }
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 640px) {
+  .intro-page h1 { font-size: 28px; }
+  .calendar-grid { grid-template-columns: repeat(4,1fr); }
+  .fox-girl { width: 86px; height: 110px; }
+}
 </style>
 </head>
 <body>
 
 <div class="float-text-layer" id="floatLayer"></div>
 
-<div class="fox-character" id="foxCharacter" title="点我一下嘛～">
-  <div class="fox-body">
-    <div class="ear left"></div>
-    <div class="ear right"></div>
-    <div class="eye left"></div>
-    <div class="eye right"></div>
-    <div class="cheek left"></div>
-    <div class="cheek right"></div>
-    <div class="mouth"></div>
-    <div class="tail"></div>
-  </div>
+<div class="fox-girl" id="foxGirl" title="点我互动～">
+  <img src="./fox-girl.html" alt="奋斗小小鱼看板娘" />
 </div>
 
 <div class="container">
 
-  <div class="top-nav" id="topNav">
+  <div class="top-nav">
     <button class="soft-btn" onclick="showIntro()">🏠 首页</button>
     <button class="soft-btn" onclick="showCalendar()">📅 日历</button>
   </div>
@@ -327,7 +279,7 @@
   <div class="intro-page card" id="introPage">
     <div class="fox-icon">🦊</div>
     <h1>奋斗小小鱼 · 上岸打卡日历</h1>
-    <p>上岸是你的名，也是你的命!</p>
+    <p>强国有我，不负所托</p>
     <p>📅 周期：10月10日 ~ 12月4日</p>
     <p>📍 地点：南京溧水兰欧国际酒店 · 粉笔训练营</p>
     <p>目标：清醒、轻盈、开心</p>
@@ -374,7 +326,16 @@
       <div class="check-item"><input type="checkbox" id="meal1"><label for="meal1">08:00 早餐：卤蛋2枚 + 玉米1根 + 小番茄/黄瓜</label></div>
       <div class="check-item"><input type="checkbox" id="meal2"><label for="meal2">12:10 午餐：杂粮饭 + 高蛋白 + 冻干蔬菜</label></div>
       <div class="check-item"><input type="checkbox" id="meal3"><label for="meal3">晚餐：A不吃 / B少量黄瓜或小番茄</label></div>
-      <div class="check-item"><input type="checkbox" id="water"><label for="meal3">饮水 ≥ 2000ml温水</label></div>
+      <div class="check-item"><input type="checkbox" id="water"><label for="water">饮水 ≥ 2000ml温水</label></div>
+    </div>
+
+    <div class="section">
+      <h3>🦊 和小小鱼互动</h3>
+      <p style="font-size:14px;color:#6e5a7d;">点击底部看板娘可以开启跟随模式；完成打卡后会触发爱心加油。</p>
+      <div class="interaction-panel">
+        <button class="feed-btn" onclick="feed('试卷')">📄 投喂试卷</button>
+        <button class="feed-btn" onclick="feed('无糖可乐')">🥤 投喂无糖可乐</button>
+      </div>
     </div>
 
     <div class="section">
@@ -462,7 +423,7 @@
   // ========== 漂浮上岸文字 ==========
   function createFloatWords() {
     const layer = document.getElementById("floatLayer");
-    const words = ["上岸", "上岸", "上岸", "加油", "必上岸", "锦鲤附体", "考的都会", "蒙的都对", "稳稳的", "上岸啦"];
+    const words = ["上岸","上岸","上岸","加油","必上岸","锦鲤附体","考的都会","蒙的都对","稳稳的","上岸啦"];
     setInterval(() => {
       const word = document.createElement("div");
       word.className = "float-word";
@@ -475,35 +436,57 @@
     }, 1400);
   }
 
-  // ========== 红狐狸跟随鼠标 ==========
-  function initFox() {
-    const fox = document.getElementById("foxCharacter");
-    let targetX = window.innerWidth - 110;
-    let targetY = window.innerHeight - 110;
+  // ========== 狐狸娘跟随鼠标 ==========
+  function initFoxGirl() {
+    const fox = document.getElementById("foxGirl");
+    let targetX = window.innerWidth - 140;
+    let targetY = window.innerHeight - 160;
     let currentX = targetX;
     let currentY = targetY;
     let following = false;
 
     document.addEventListener("mousemove", (e) => {
       if (!following) return;
-      targetX = Math.min(Math.max(e.clientX - 39, 10), window.innerWidth - 100);
-      targetY = Math.min(Math.max(e.clientY - 39, 10), window.innerHeight - 100);
+      targetX = Math.min(Math.max(e.clientX - 50, 10), window.innerWidth - 120);
+      targetY = Math.min(Math.max(e.clientY - 60, 10), window.innerHeight - 130);
     });
 
     fox.addEventListener("click", () => {
       following = !following;
-      fox.classList.add("jumping");
-      setTimeout(() => fox.classList.remove("jumping"), 500);
+      fox.classList.toggle("walking", following);
+      showLove(fox, following ? "来吧！一起上岸！" : "休息一下～");
     });
 
     function followLoop() {
       currentX += (targetX - currentX) * 0.08;
       currentY += (targetY - currentY) * 0.08;
       fox.style.left = currentX + "px";
-      fox.style.bottom = (window.innerHeight - currentY - 78) + "px";
+      fox.style.bottom = (window.innerHeight - currentY - 140) + "px";
       requestAnimationFrame(followLoop);
     }
     followLoop();
+  }
+
+  // ========== 互动：投喂 ==========
+  function feed(item) {
+    const fox = document.getElementById("foxGirl");
+    fox.classList.add("walking");
+    setTimeout(() => fox.classList.remove("walking"), 1200);
+
+    const text = item === "试卷" ? "刷完这套，离上岸更近一步！" : "无糖可乐，轻盈加油！";
+    showLove(fox, text);
+  }
+
+  // ========== 爱心加油动画 ==========
+  function showLove(target, text) {
+    const rect = target.getBoundingClientRect();
+    const popup = document.createElement("div");
+    popup.className = "love-popup";
+    popup.textContent = "❤ " + text;
+    popup.style.left = (rect.left + rect.width / 2 - 60) + "px";
+    popup.style.top = (rect.top - 10) + "px";
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 1600);
   }
 
   // ========== 页面切换 ==========
@@ -609,10 +592,22 @@
     document.getElementById("note").addEventListener("input", e => {
       localStorage.setItem(getKey("note"), e.target.value);
     });
+
+    // 完成打卡触发爱心加油
+    const all = document.querySelectorAll("#courseList input, .section input[type=checkbox]");
+    all.forEach(cb => {
+      cb.addEventListener("change", () => {
+        const checked = [...all].filter(x => x.checked).length;
+        if (checked >= Math.ceil(all.length / 2)) {
+          const fox = document.getElementById("foxGirl");
+          showLove(fox, "做得好！继续上岸！");
+        }
+      });
+    });
   }
 
   createFloatWords();
-  initFox();
+  initFoxGirl();
   bindSave();
   showIntro();
 </script>
