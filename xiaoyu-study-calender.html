@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🦊 奋斗小小鱼｜公考训练营打卡日历</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "ZCOOL KuaiLe", "Ma Shan Zheng", "Microsoft YaHei", sans-serif;
+    color: #5b4b64;
+    background: linear-gradient(135deg, #ffeef6 0%, #eaf6ff 45%, #f3e8ff 100%);
+    overflow-x: hidden;
+  }
+
+  /* 漂浮文字动画层 */
+  .float-text-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .float-word {
+    position: absolute;
+    font-size: 22px;
+    color: #ff7aa8;
+    opacity: 0;
+    animation: floatUp linear infinite;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(255, 182, 193, 0.6);
+    letter-spacing: 2px;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) translateX(0) rotate(-6deg); opacity: 0; }
+    10% { opacity: 0.85; }
+    50% { transform: translateY(50vh) translateX(40px) rotate(4deg); opacity: 0.7; }
+    100% { transform: translateY(-20vh) translateX(-30px) rotate(-4deg); opacity: 0; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 24px 18px 40px;
+  }
+
+  /* 顶部导航 */
+  .top-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .soft-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    background: #fff;
+    color: #7a5fa2;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(180, 140, 210, 0.25);
+    transition: 0.25s;
+  }
+  .soft-btn:hover {
+    background: #ffd6ec;
+    transform: translateY(-2px);
+  }
+  .soft-btn.pink { background: #ff9ec7; color: #fff; }
+  .soft-btn.pink:hover { background: #ff7ab0; }
+
+  /* 页面通用卡片 */
+  .card {
+    background: rgba(255, 255, 255, 0.78);
+    border: 2px solid #fff;
+    border-radius: 28px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(181, 145, 214, 0.22);
+    backdrop-filter: blur(6px);
+  }
+
+  /* 序言页 */
+  .intro-page { text-align: center; padding: 30px 10px; }
+  .fox-icon { font-size: 72px; margin-bottom: 10px; animation: foxBounce 2s ease-in-out infinite; }
+  @keyframes foxBounce {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-10px) rotate(4deg); }
+  }
+  .intro-page h1 {
+    font-size: 34px;
+    color: #ff6fa0;
+    margin: 8px 0 14px;
+    text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(255, 182, 193, 0.5);
+  }
+  .intro-page p { font-size: 17px; line-height: 1.9; color: #6e5a7d; }
+  .big-btn {
+    margin-top: 22px;
+    padding: 14px 34px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff9ec7, #b9a7ff);
+    color: #fff;
+    font-family: inherit;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(255, 120, 170, 0.4);
+    transition: 0.25s;
+  }
+  .big-btn:hover { transform: translateY(-3px) scale(1.03); }
+
+  /* 日历页 */
+  .calendar-page h2 {
+    text-align: center;
+    color: #7a5fa2;
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .day-cell {
+    background: #fff;
+    border: 2px solid #fff;
+    border-radius: 18px;
+    padding: 12px 6px;
+    text-align: center;
+    min-height: 88px;
+    cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 4px 12px rgba(181, 145, 214, 0.18);
+  }
+  .day-cell:hover { transform: translateY(-4px) scale(1.04); background: #fff5fb; }
+  .day-cell.empty { background: #f1e9fa; cursor: default; transform: none; }
+  .day-cell.normal { border-color: #fff; }
+  .day-cell.exam { background: #ffe4ec; border-color: #ff9ec7; }
+  .day-cell.celebration { background: #e4fff1; border-color: #9ee8b8; }
+  .day-cell.mock { background: #fff7d6; border-color: #ffd966; }
+  .day-label { font-size: 15px; color: #5b4b64; }
+  .day-desc { font-size: 11px; margin-top: 4px; color: #7a6a8c; line-height: 1.35; }
+  .legend { text-align: center; margin-top: 14px; font-size: 14px; color: #6e5a7d; }
+  .legend span {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin: 0 4px;
+    background: #fff;
+  }
+
+  /* 打卡详情页 */
+  .check-page h2 {
+    color: #ff6fa0;
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  .tip-box {
+    padding: 12px 14px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .tip-red { background: #ffe4ec; border-left: 5px solid #ff7ab0; }
+  .tip-green { background: #e4fff1; border-left: 5px solid #6ddc92; }
+  .tip-yellow { background: #fff7d6; border-left: 5px solid #ffd966; }
+  .tip-gray { background: #f1e9fa; border-left: 5px solid #b9a7ff; }
+
+  .section {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #fff;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 22px rgba(181, 145, 214, 0.18);
+  }
+  .section h3 {
+    color: #7a5fa2;
+    margin-top: 0;
+    font-size: 20px;
+  }
+  .check-item {
+    padding: 9px 4px;
+    font-size: 16px;
+    color: #5b4b64;
+  }
+  input[type="checkbox"] {
+    transform: scale(1.3);
+    margin-right: 10px;
+    accent-color: #ff7ab0;
+  }
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 2px solid #f1e9fa;
+    background: #fff;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  ul { line-height: 1.9; color: #5b4b64; }
+
+  /* 红狐狸角色 */
+  .fox-character {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    width: 78px;
+    height: 78px;
+    z-index: 9999;
+    cursor: pointer;
+    transition: left 0.4s ease-out, bottom 0.4s ease-out;
+    user-select: none;
+    filter: drop-shadow(0 6px 10px rgba(255, 105, 135, 0.35));
+  }
+  .fox-character.jumping { animation: foxJump 0.5s ease; }
+  @keyframes foxJump {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-18px) rotate(6deg); }
+  }
+  .fox-character .fox-body {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 35% 30%, #ff9ec7 0%, #ff5c8a 45%, #e5446b 100%);
+    border-radius: 50% 50% 42% 42%;
+    position: relative;
+    border: 3px solid #fff;
+  }
+  .fox-character .ear {
+    position: absolute;
+    top: -14px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 22px solid #ff5c8a;
+  }
+  .fox-character .ear.left { left: 14px; transform: rotate(-14deg); }
+  .fox-character .ear.right { right: 14px; transform: rotate(14deg); }
+  .fox-character .eye {
+    position: absolute;
+    top: 30px;
+    width: 10px;
+    height: 14px;
+    background: #2b2440;
+    border-radius: 50%;
+  }
+  .fox-character .eye.left { left: 22px; }
+  .fox-character .eye.right { right: 22px; }
+  .fox-character .cheek {
+    position: absolute;
+    top: 44px;
+    width: 10px;
+    height: 6px;
+    background: #ffd1e0;
+    border-radius: 50%;
+  }
+  .fox-character .cheek.left { left: 14px; }
+  .fox-character .cheek.right { right: 14px; }
+  .fox-character .mouth {
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 4px;
+    border-bottom: 2px solid #2b2440;
+    border-radius: 0 0 8px 8px;
+  }
+  .fox-character .tail {
+    position: absolute;
+    right: -14px;
+    bottom: 14px;
+    width: 24px;
+    height: 18px;
+    background: #ff5c8a;
+    border-radius: 0 18px 18px 0;
+    border: 3px solid #fff;
+    transform-origin: left center;
+    animation: tailWag 1.6s ease-in-out infinite;
+  }
+  @keyframes tailWag {
+    0%, 100% { transform: rotate(-10deg); }
+    50% { transform: rotate(18deg); }
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 640px) {
+    .intro-page h1 { font-size: 28px; }
+    .calendar-grid { grid-template-columns: repeat(4, 1fr); }
+    .fox-character { width: 64px; height: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="float-text-layer" id="floatLayer"></div>
+
+<div class="fox-character" id="foxCharacter" title="点我一下嘛～">
+  <div class="fox-body">
+    <div class="ear left"></div>
+    <div class="ear right"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="cheek left"></div>
+    <div class="cheek right"></div>
+    <div class="mouth"></div>
+    <div class="tail"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="top-nav" id="topNav">
+    <button class="soft-btn" onclick="showIntro()">🏠 首页</button>
+    <button class="soft-btn" onclick="showCalendar()">📅 日历</button>
+  </div>
+
+  <!-- 序言首页 -->
+  <div class="intro-page card" id="introPage">
+    <div class="fox-icon">🦊</div>
+    <h1>奋斗小小鱼 · 上岸打卡日历</h1>
+    <p>上岸是你的名，也是你的命!</p>
+    <p>📅 周期：10月10日 ~ 12月4日</p>
+    <p>📍 地点：南京溧水兰欧国际酒店 · 粉笔训练营</p>
+    <p>目标：清醒、轻盈、开心</p>
+    <button class="big-btn" onclick="showCalendar()">打开日历 ✨</button>
+  </div>
+
+  <!-- 日历总览页 -->
+  <div class="calendar-page card hidden" id="calendarPage">
+    <h2>📅 点击日期开始打卡</h2>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="legend">
+      <span>🔴 考试/行程</span>
+      <span>🟡 模考日</span>
+      <span>🟢 婚礼/放纵日</span>
+    </div>
+  </div>
+
+  <!-- 单日打卡页 -->
+  <div class="check-page hidden" id="checkPage">
+    <div class="top-nav">
+      <button class="soft-btn" onclick="showCalendar()">← 返回日历</button>
+      <button class="soft-btn pink" onclick="showIntro()">🏠 返回首页</button>
+    </div>
+
+    <div class="card">
+      <h2 id="checkTitle">🦊 当日打卡</h2>
+      <div class="tip-box" id="dayTip"></div>
+    </div>
+
+    <div class="section">
+      <h3>📚 今日课程任务</h3>
+      <div id="courseList"></div>
+    </div>
+
+    <div class="section">
+      <h3>💊 每日补剂</h3>
+      <div class="check-item"><input type="checkbox" id="supp1"><label for="supp1">早餐：钙+维D + B族复合维生素</label></div>
+      <div class="check-item"><input type="checkbox" id="supp2"><label for="supp2">午餐：鱼油（EPA+DHA约250mg）</label></div>
+      <div class="check-item"><input type="checkbox" id="supp3"><label for="supp3">睡前：甘氨酸镁200–300mg</label></div>
+    </div>
+
+    <div class="section">
+      <h3>🍽️ 三餐打卡</h3>
+      <div class="check-item"><input type="checkbox" id="meal1"><label for="meal1">08:00 早餐：卤蛋2枚 + 玉米1根 + 小番茄/黄瓜</label></div>
+      <div class="check-item"><input type="checkbox" id="meal2"><label for="meal2">12:10 午餐：杂粮饭 + 高蛋白 + 冻干蔬菜</label></div>
+      <div class="check-item"><input type="checkbox" id="meal3"><label for="meal3">晚餐：A不吃 / B少量黄瓜或小番茄</label></div>
+      <div class="check-item"><input type="checkbox" id="water"><label for="meal3">饮水 ≥ 2000ml温水</label></div>
+    </div>
+
+    <div class="section">
+      <h3>📝 今日心情与学习记录</h3>
+      <textarea id="note" rows="4" placeholder="记录正确率、错题、压力、水肿、睡眠……"></textarea>
+    </div>
+
+    <div class="section">
+      <h3>📜 小小鱼守则</h3>
+      <ul>
+        <li>普通日：晚餐优先不吃，保持轻盈。</li>
+        <li>模考日：午餐多加一份蛋白，晚餐可少量补充。</li>
+        <li>放纵日：蛋白不减，碳水增加，不暴食。</li>
+        <li>旅途日：吃常温即食，补剂随身带。</li>
+        <li>婚宴：先蛋白和蔬菜，再少量主食和甜品。</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ========== 课程表数据 ==========
+  const courseSchedule = {
+    "10-10": {course:["9:00-12:00 报到","14:00-17:00 报到","18:00-21:00 班会+预习"],special:"normal",desc:"训练营报到"},
+    "10-11": {course:["9:00-12:00 判断1","14:00-17:00 判断2","18:00-21:00 判断3"],special:"normal",desc:""},
+    "10-12": {course:["9:00-12:00 判断4","14:00-17:00 判断5","18:00-21:00 判断6"],special:"normal",desc:""},
+    "10-13": {course:["9:00-12:00 申论1","14:00-17:00 申论2","18:00-21:00 申论3"],special:"normal",desc:""},
+    "10-14": {course:["9:00-12:00 申论4","14:00-17:00 申论5","18:00-21:00 申论6"],special:"normal",desc:""},
+    "10-15": {course:["9:00-12:00 数资1","14:00-17:00 数资2","18:00-21:00 数资3"],special:"normal",desc:""},
+    "10-16": {course:["9:00-12:00 数资4","14:00-17:00 数资5","18:00-21:00 数资6"],special:"normal",desc:""},
+    "10-17": {course:["9:00-12:00 言语1","14:00-17:00 言语2","18:00-21:00 言语3"],special:"exam",desc:"泰州事业编抢票+订酒店"},
+    "10-18": {course:["9:00-12:00 言语4","14:00-17:00 言语5","18:00-21:00 言语6"],special:"normal",desc:""},
+    "10-19": {course:["9:00-12:00 自习","14:00-17:00 自习","18:00-21:00 自习"],special:"mock",desc:"模考日"},
+    "10-20": {course:["9:00-12:00 言语套题1","14:00-17:00 言语套题2","18:00-21:00 言语套题3"],special:"normal",desc:""},
+    "10-21": {course:["9:00-12:00 言语套题4","14:00-17:00 言语套题5","18:00-21:00 言语套题6"],special:"normal",desc:""},
+    "10-22": {course:["9:00-12:00 言语套题7","14:00-17:00 言语套题8","18:00-21:00 言语套题9"],special:"normal",desc:""},
+    "10-23": {course:["9:00-12:00 言语套题10","14:00-17:00 言语套题11","18:00-21:00 言语套题12"],special:"normal",desc:""},
+    "10-24": {course:["9:00-12:00 自习","14:00-17:00 自习","18:00-21:00 自习"],special:"exam",desc:"14点南京车站→江西伴娘行程"},
+    "10-25": {course:["9:00-12:00 模考","14:00-17:00 模考","18:00-21:00 模考"],special:"celebration",desc:"江西婚礼｜放纵日①"},
+    "10-26": {course:["9:00-12:00 数资套题1","14:00-17:00 数资套题2","18:00-21:00 数资套题3"],special:"normal",desc:""},
+    "10-27": {course:["9:00-12:00 数资套题4","14:00-17:00 数资套题5","18:00-21:00 数资套题6"],special:"normal",desc:""},
+    "10-28": {course:["9:00-12:00 数资套题7","14:00-17:00 数资套题8","18:00-21:00 数资套题9"],special:"normal",desc:""},
+    "10-29": {course:["9:00-12:00 数资套题10","14:00-17:00 数资套题11","18:00-21:00 数资套题12"],special:"normal",desc:""},
+    "10-30": {course:["9:00-12:00 判断套题1","14:00-17:00 判断套题2","18:00-21:00 判断套题3"],special:"exam",desc:"抵达泰州，入住考前酒店"},
+    "10-31": {course:["9:00-12:00 判断套题4","14:00-17:00 判断套题5","18:00-21:00 判断套题6"],special:"celebration",desc:"泰州事业编笔试｜放纵日②"},
+    "11-01": {course:["9:00-12:00 模考","14:00-17:00 模考","18:00-21:00 模考"],special:"celebration",desc:"郑州伴娘婚礼｜放纵日③"},
+    "11-02": {course:["9:00-12:00 判断套题7","14:00-17:00 判断套题8","18:00-21:00 判断套题9"],special:"normal",desc:""},
+    "11-03": {course:["9:00-12:00 判断套题10","14:00-17:00 判断套题11","18:00-21:00 判断套题12"],special:"normal",desc:""},
+    "11-04": {course:["9:00-12:00 申论专项1","14:00-17:00 申论专项2","18:00-21:00 申论专项3"],special:"normal",desc:""},
+    "11-05": {course:["9:00-12:00 申论专项4","14:00-17:00 申论专项5","18:00-21:00 申论专项6"],special:"normal",desc:""},
+    "11-06": {course:["9:00-12:00 申论专项7","14:00-17:00 申论专项8","18:00-21:00 申论专项9"],special:"normal",desc:""},
+    "11-07": {course:["9:00-12:00 申论专项10","14:00-17:00 申论专项11","18:00-21:00 申论专项12"],special:"normal",desc:""},
+    "11-08": {course:["9:00-12:00 模考","14:00-17:00 模考","18:00-21:00 模考"],special:"mock",desc:"模考日"},
+    "11-09": {course:["9:00-12:00 行测测验1","14:00-17:00 行测测验2","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-10": {course:["9:00-12:00 行测测验3","14:00-17:00 行测测验4","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-11": {course:["9:00-12:00 行测测验5","14:00-17:00 行测测验6","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-12": {course:["9:00-12:00 行测测验7","14:00-17:00 行测测验8","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-13": {course:["9:00-12:00 行测测验9","14:00-17:00 申论测验10","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-14": {course:["9:00-12:00 行测测验11","14:00-17:00 行测测验12","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-15": {course:["9:00-12:00 模考","14:00-17:00 模考","18:00-21:00 模考"],special:"mock",desc:"模考日"},
+    "11-16": {course:["9:00-12:00 行测测验13","14:00-17:00 申论测验12","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-17": {course:["9:00-12:00 行测测验15","14:00-17:00 行测测验16","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-18": {course:["9:00-12:00 行测测验17","14:00-17:00 行测测验18","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-19": {course:["9:00-12:00 行测测验19","14:00-17:00 行测测验20","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-20": {course:["9:00-12:00 江苏省考行测","14:00-17:00 江苏省考申论","18:00-21:00 复盘"],special:"normal",desc:""},
+    "11-21": {course:["9:00-12:00 预估国考","14:00-17:00 预估国考","18:00-21:00 预估国考"],special:"exam",desc:"预估国考"},
+    "11-22": {course:["9:00-12:00 预估国考","14:00-17:00 预估国考","18:00-21:00 预估国考"],special:"exam",desc:"预估国考"},
+    "11-23": {course:["9:00-12:00 错题集","14:00-17:00 错题集","18:00-21:00 错题集"],special:"normal",desc:""},
+    "11-24": {course:["9:00-12:00 行测模考","14:00-17:00 申论模考","18:00-21:00 串讲"],special:"normal",desc:""},
+    "11-25": {course:["9:00-12:00 行测模考","14:00-17:00 申论模考","18:00-21:00 串讲"],special:"normal",desc:""},
+    "11-26": {course:["9:00-12:00 行测模考","14:00-17:00 申论模考","18:00-21:00 串讲"],special:"normal",desc:""},
+    "11-27": {course:["9:00-12:00 行测模考","14:00-17:00 申论模考","18:00-21:00 串讲"],special:"normal",desc:""},
+    "11-28": {course:["9:00-12:00 自习","14:00-17:00 自习","18:00-21:00 自习"],special:"normal",desc:""},
+    "11-29": {course:["9:00-12:00 省考终极模考","14:00-17:00 省考终极模考","18:00-21:00 省考终极模考"],special:"mock",desc:"省考终极模考"},
+    "11-30": {course:["9:00-12:00 行测模考","14:00-17:00 行测模考","18:00-21:00 复盘"],special:"normal",desc:""},
+    "12-01": {course:["9:00-12:00 行测模考","14:00-17:00 行测模考","18:00-21:00 复盘"],special:"normal",desc:""},
+    "12-02": {course:["9:00-12:00 行测模考","14:00-17:00 行测模考","18:00-21:00 复盘"],special:"normal",desc:""},
+    "12-03": {course:["9:00-12:00 调整心态","14:00-17:00 调整心态","18:00-21:00 调整心态"],special:"normal",desc:"省考心态调整"},
+    "12-04": {course:["9:00-12:00 自习","14:00-17:00 自习","18:00-21:00 自习"],special:"normal",desc:"训练营收尾"}
+  };
+
+  let currentDayKey = "";
+
+  // ========== 漂浮上岸文字 ==========
+  function createFloatWords() {
+    const layer = document.getElementById("floatLayer");
+    const words = ["上岸", "上岸", "上岸", "加油", "必上岸", "锦鲤附体", "考的都会", "蒙的都对", "稳稳的", "上岸啦"];
+    setInterval(() => {
+      const word = document.createElement("div");
+      word.className = "float-word";
+      word.textContent = words[Math.floor(Math.random() * words.length)];
+      word.style.left = Math.random() * 100 + "vw";
+      word.style.animationDuration = (10 + Math.random() * 8) + "s";
+      word.style.fontSize = (18 + Math.random() * 10) + "px";
+      layer.appendChild(word);
+      setTimeout(() => word.remove(), 18000);
+    }, 1400);
+  }
+
+  // ========== 红狐狸跟随鼠标 ==========
+  function initFox() {
+    const fox = document.getElementById("foxCharacter");
+    let targetX = window.innerWidth - 110;
+    let targetY = window.innerHeight - 110;
+    let currentX = targetX;
+    let currentY = targetY;
+    let following = false;
+
+    document.addEventListener("mousemove", (e) => {
+      if (!following) return;
+      targetX = Math.min(Math.max(e.clientX - 39, 10), window.innerWidth - 100);
+      targetY = Math.min(Math.max(e.clientY - 39, 10), window.innerHeight - 100);
+    });
+
+    fox.addEventListener("click", () => {
+      following = !following;
+      fox.classList.add("jumping");
+      setTimeout(() => fox.classList.remove("jumping"), 500);
+    });
+
+    function followLoop() {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      fox.style.left = currentX + "px";
+      fox.style.bottom = (window.innerHeight - currentY - 78) + "px";
+      requestAnimationFrame(followLoop);
+    }
+    followLoop();
+  }
+
+  // ========== 页面切换 ==========
+  function showIntro() {
+    document.getElementById("introPage").classList.remove("hidden");
+    document.getElementById("calendarPage").classList.add("hidden");
+    document.getElementById("checkPage").classList.add("hidden");
+  }
+  function showCalendar() {
+    document.getElementById("introPage").classList.add("hidden");
+    document.getElementById("calendarPage").classList.remove("hidden");
+    document.getElementById("checkPage").classList.add("hidden");
+    renderCalendar();
+  }
+  function showCheckPage(dayKey, dayText) {
+    currentDayKey = dayKey;
+    document.getElementById("introPage").classList.add("hidden");
+    document.getElementById("calendarPage").classList.add("hidden");
+    document.getElementById("checkPage").classList.remove("hidden");
+    document.getElementById("checkTitle").textContent = `🦊 奋斗小小鱼 · ${dayText} 打卡`;
+    renderDayTip();
+    renderCourseList();
+    loadDayData();
+  }
+
+  function renderDayTip() {
+    const info = courseSchedule[currentDayKey];
+    const tip = document.getElementById("dayTip");
+    let cls = "tip-gray", text = "普通授课日，按基础计划学习和饮食。";
+    if (info.special === "celebration") { cls = "tip-green"; text = `🟢 ${info.desc}：可以安排结构化放纵日，蛋白保持充足。`; }
+    else if (info.special === "mock") { cls = "tip-yellow"; text = `🟡 ${info.desc}：脑力消耗高，午餐加一份蛋白，晚餐可少量补充。`; }
+    else if (info.special === "exam") { cls = "tip-red"; text = `🔴 ${info.desc}：注意行程时间，随身带补剂和即食蛋白。`; }
+    tip.className = "tip-box " + cls;
+    tip.textContent = text;
+  }
+
+  function renderCourseList() {
+    const list = document.getElementById("courseList");
+    list.innerHTML = "";
+    courseSchedule[currentDayKey].course.forEach((item, idx) => {
+      const id = "course" + idx;
+      const div = document.createElement("div");
+      div.className = "check-item";
+      div.innerHTML = `<input type="checkbox" id="${id}"><label for="${id}">${item}</label>`;
+      list.appendChild(div);
+    });
+  }
+
+  // ========== 渲染日历 ==========
+  function renderCalendar() {
+    const grid = document.getElementById("calendarGrid");
+    grid.innerHTML = "";
+    ["一","二","三","四","五","六","日"].forEach(w => {
+      const d = document.createElement("div");
+      d.className = "day-cell empty day-label";
+      d.textContent = w;
+      grid.appendChild(d);
+    });
+    for (let i = 0; i < 5; i++) {
+      const empty = document.createElement("div");
+      empty.className = "day-cell empty";
+      grid.appendChild(empty);
+    }
+    const days = [];
+    for (let m = 10; m <= 12; m++) {
+      const maxDay = m === 10 ? 31 : m === 11 ? 30 : 4;
+      const start = m === 10 ? 10 : 1;
+      for (let d = start; d <= maxDay; d++) days.push([m, d]);
+    }
+    days.forEach(([m, d]) => {
+      const key = `${m}-${String(d).padStart(2, "0")}`;
+      const cell = document.createElement("div");
+      const info = courseSchedule[key];
+      cell.className = "day-cell " + (info?.special || "normal");
+      cell.innerHTML = `<div class="day-label">${m}/${d}</div><div class="day-desc">${info?.desc || "打卡"}</div>`;
+      cell.onclick = () => showCheckPage(key, `${m}月${d}日`);
+      grid.appendChild(cell);
+    });
+  }
+
+  // ========== 本地存储 ==========
+  function getKey(id) { return `xiaoyu_${currentDayKey}_${id}`; }
+  function loadDayData() {
+    courseSchedule[currentDayKey].course.forEach((_, idx) => {
+      const el = document.getElementById("course" + idx);
+      el.checked = localStorage.getItem(getKey("course" + idx)) === "true";
+    });
+    ["supp1","supp2","supp3","meal1","meal2","meal3","water"].forEach(id => {
+      const el = document.getElementById(id);
+      el.checked = localStorage.getItem(getKey(id)) === "true";
+    });
+    document.getElementById("note").value = localStorage.getItem(getKey("note")) || "";
+  }
+  function bindSave() {
+    document.getElementById("courseList").addEventListener("change", e => {
+      if (e.target.id) localStorage.setItem(getKey(e.target.id), e.target.checked);
+    });
+    ["supp1","supp2","supp3","meal1","meal2","meal3","water"].forEach(id => {
+      document.getElementById(id).addEventListener("change", e => {
+        localStorage.setItem(getKey(id), e.target.checked);
+      });
+    });
+    document.getElementById("note").addEventListener("input", e => {
+      localStorage.setItem(getKey("note"), e.target.value);
+    });
+  }
+
+  createFloatWords();
+  initFox();
+  bindSave();
+  showIntro();
+</script>
+
+</body>
+</html>
